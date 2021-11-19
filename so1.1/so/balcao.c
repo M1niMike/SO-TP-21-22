@@ -1,47 +1,80 @@
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 #include <stdio.h>
+
 #include "balcao.h"
 #include "util.h"
 #include "comunicacao.h"
 #include "utente.h"
 
-/*int resposta();
+
+int lePipes(){
+
+    int FD_BC[2];
+
+    int FD_CB[2];
+
+    char str[50];
+
+    pipe(FD_BC);
+
+    pipe(FD_CB);
+
+    int id = fork();
 
 
-void getBalcaoCorrer(){
-     int isBalcaoCorrer = 0; // quando esta a 0 nao esta a correr
-}
+    if (id > 0){
+        close(FD_BC[0]);
 
-void read_pipe(UTENTE *p){
-    int fd[2];
-    // fd[0] - read
-    // fd[1] - write
+        printf("\nIndique os seus sintomas\n");
 
-    if (pipe(fd) == -1 ) {
-        printf("\nOcorreu um erro com o PIPE!\n");
-        exit(EXIT_FAILURE);
-    }else{
+        fgets(str, 49, stdin);
 
-            int id = fork();
+        write(FD_BC[1], str, 49);
 
-            if (id == 0){
-                close(fd[0]);
-                if (read(fd[0], p->sintomas, sizeof(UTENTE) == -1))
-                {
-                    printf("\nOcorreu um erro com a leitura do nome!\n");
-                    exit(EXIT_FAILURE);
-                }
-
-
-
-
-
-
-        }
+        close(FD_CB[1]);
 
     }
 
+    else if (id == 0){
+        close(STDIN_FILENO);
 
-}*/
+        dup(FD_BC[0]); // para duplicar o file descriptor, ligando-o ao primeiro fd vazio
+
+        close(FD_BC[0]);
+
+        close(FD_BC[1]);
+
+        close(STDOUT_FILENO);
+
+        dup(FD_CB[1]);
+        
+
+
+        execl("./classificador", "classificador", NULL);
+
+
+
+
+        //close(FD_CB[0]);
+
+
+        /*read(FD_PF[0], str, 49);
+
+        printf("%s", str)*/
+    }
+    else{
+        printf("Falha na criacao do fork()");
+
+        return 0;
+    }
+
+}
+
+    
 
 
 void varAmb(){
@@ -75,7 +108,9 @@ int main()
     UTENTE p;
 
     varAmb(); 
-    pipe(fd);   
+
+    lePipes();
+    /*pipe(fd);   
 
     int pid = getpid();
 
@@ -97,6 +132,6 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    }
+    }*/
 
 }
