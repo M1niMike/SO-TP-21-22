@@ -18,13 +18,13 @@
 typedef struct {
     int quantidadeMedicos;
     int quantidadeClientes;
-    char* caminho;
+    //char* caminho;
 } BALCAO;
 
 static const BALCAO balcaoDefault = {
         .quantidadeClientes = 0,
         .quantidadeMedicos = 0,
-        .caminho = NULL
+        // .caminho = NULL
 };
 
 
