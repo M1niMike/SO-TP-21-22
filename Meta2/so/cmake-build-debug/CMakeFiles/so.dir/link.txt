@@ -1,1 +1,0 @@
-/usr/bin/cc -g CMakeFiles/so.dir/balcao.c.o CMakeFiles/so.dir/classifica.c.o CMakeFiles/so.dir/utente.c.o CMakeFiles/so.dir/medico.c.o -o so 
